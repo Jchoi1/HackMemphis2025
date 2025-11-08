@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("userRole", result.role);
 
         if (result.role === "organization") {
-          window.location.href = "bussinessdash.html";
+          window.location.href = "Bussinessdash.html";
         } else if (result.role === "user") {
           window.location.href = "Userdashboard.html";
         } else if (result.role === "admin") {
