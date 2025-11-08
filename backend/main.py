@@ -23,6 +23,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+class LoginData(BaseModel):
+    username: str
+    password: str
+    accountType: str
+
 class OrganizationUser(BaseModel):
     username: str
     password: str
@@ -35,6 +40,27 @@ class OrganizationUser(BaseModel):
     org_eligibility: str | None = None
     org_intake_procedure: str | None = None
     org_hours: str | None = None
+
+@app.post("/api/login")
+def login_user(data: LoginData):
+    conn = sqlite3.connect("211Memphis.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    # Map "business" → "organization" since your table uses that role
+    role = "organization" if data.accountType == "business" else data.accountType
+
+    cursor.execute(
+        "SELECT * FROM users WHERE username = ? AND password = ? AND role = ?",
+        (data.username, data.password, role)
+    )
+    user = cursor.fetchone()
+    conn.close()
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    return {"message": "Login successful", "role": user["role"], "username": user["username"]}
 
 @app.post("/api/register/organization")
 def register_org_user(user: OrganizationUser):

@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (res.ok) {
         alert("Business account submitted!");
-        window.location.href = "officallogin.html";
+        window.location.href = "Bussinessdash.html";
       } else {
         alert(result.detail || result.message || "Registration failed.");
       }
