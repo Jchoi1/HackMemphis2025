@@ -1,19 +1,22 @@
-// business-reg.js — handles BUSINESS sign-up with live typed values
-document.getElementById('bizRegForm').addEventListener('submit', async e => {
-  e.preventDefault(); // stop page reload
+// Get the correct form
+const form = document.getElementById('bizReg');
 
-  const data = Object.fromEntries(new FormData(e.target)); // grabs ALL inputs
+form.addEventListener('submit', function(e) {
+  e.preventDefault(); // prevent page reload
 
-  const res = await fetch('/api/business/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(r => r.json());
+  // Collect all input values
+  const data = Object.fromEntries(new FormData(form));
 
-  if (res.ok) {
-    alert('Business account submitted!');
-    location = 'business/login.html'; // go to biz login after success
-  } else {
-    alert(res.message || 'Registration failed.');
+  // Simple validation for required fields
+  if (!data.username || !data.password || !data.businessName || !data.address) {
+    alert('Please fill in all required fields.');
+    return;
   }
+
+  // Store data locally for testing
+  localStorage.setItem('savedBusiness', JSON.stringify(data));
+
+  // Notify user and redirect
+  alert('Business account created!');
+  window.location.href = 'officallogin.html';
 });

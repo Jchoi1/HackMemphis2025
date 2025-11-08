@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grizzly Biz Reg | 901-211</title>
   <link rel="stylesheet" href="Bussinessreg.css" />
+  <style>
+    /* Minimal styling for demo purposes */
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+    .den-card { background: #f5f5f5; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); width: 300px; }
+    input { display: block; margin: 10px 0; padding: 8px; width: 100%; }
+    button { padding: 8px 16px; margin-top: 10px; width: 100%; }
+    .paw-line { text-align: center; margin-bottom: 10px; }
+    .tiny-foot { font-size: 0.8em; text-align: center; margin-top: 10px; }
+  </style>
 </head>
 
 <body>
@@ -17,7 +26,7 @@
       <div class="paw-line">🐾 Grizzly Business 🐾</div>
       <h2>Register</h2>
 
-      <form id="bizReg" action="/api/business/register" method="POST">
+      <form id="bizReg">
         <input name="username" type="text" placeholder="Username" required />
         <input name="password" type="password" placeholder="Password" minlength="6" required />
         <input name="businessName" type="text" placeholder="Business name" required />
@@ -34,5 +43,35 @@
   <footer>
     &copy; 2025 901-211 | United Way of the Mid-South
   </footer>
+
+  <script>
+    const form = document.getElementById('bizReg');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent page reload
+
+      // Get all input values
+      const username = form.querySelector('input[name="username"]').value.trim();
+      const password = form.querySelector('input[name="password"]').value;
+      const businessName = form.querySelector('input[name="businessName"]').value.trim();
+      const address = form.querySelector('input[name="address"]').value.trim();
+      const email = form.querySelector('input[name="email"]').value.trim();
+      const phone = form.querySelector('input[name="phone"]').value.trim();
+
+      // Validate required fields
+      if (!username || !password || !businessName || !address) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Store business data in localStorage
+      const businessData = { username, password, businessName, address, email, phone };
+      localStorage.setItem('savedBusiness', JSON.stringify(businessData));
+
+      // Notify and redirect
+      alert('Business account created!');
+      window.location.href = 'officallogin.html';
+    });
+  </script>
 </body>
 </html>
