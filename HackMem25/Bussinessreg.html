@@ -17,13 +17,13 @@
       <div class="paw-line">🐾 Grizzly Business 🐾</div>
       <h2>Register</h2>
 
-      <form id="bizReg" action="/api/business/register" method="POST">
+      <form id="bizReg">
         <input name="username" type="text" placeholder="Username" required />
         <input name="password" type="password" placeholder="Password" minlength="6" required />
-        <input name="businessName" type="text" placeholder="Business name" required />
-        <input name="address" type="text" placeholder="Address" required />
-        <input name="email" type="email" placeholder="Email (or phone below)" />
-        <input name="phone" type="tel" placeholder="Phone (if no email)" />
+        <input name="org_name" type="text" placeholder="Business name" required />
+        <input name="org_address" type="text" placeholder="Address" required />
+        <input name="org_email" type="email" placeholder="Email (or phone below)" />
+        <input name="org_phone" type="tel" placeholder="Phone (if no email)" />
         <button type="submit">Create Account</button>
       </form>
 
@@ -34,5 +34,6 @@
   <footer>
     &copy; 2025 901-211 | United Way of the Mid-South
   </footer>
+  <script src="Bussinessreg.js"></script>
 </body>
 </html>
