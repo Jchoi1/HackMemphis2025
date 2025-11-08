@@ -82,3 +82,19 @@ def register_org_user(user: OrganizationUser):
     conn.commit()
     conn.close()
     return {"message": "Organization user registered successfully"}
+
+@app.get("/api/organizations")
+def get_all_organizations():
+    conn = sqlite3.connect("211Memphis.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, org_name AS name, org_service_description AS desc,
+               org_eligibility AS eligibility, org_address, org_phone, org_email
+        FROM users
+        WHERE role = 'organization'
+    """)
+    orgs = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return {"organizations": orgs}
