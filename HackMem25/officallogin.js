@@ -1,25 +1,59 @@
-// officallogin.js — unified sign-in for user / business / admin
-document.getElementById('uniLogin').addEventListener('submit', async e => {
-  e.preventDefault(); // keep page from reloading
+// officallogin.js — unified local login for user, business, and admin
+const form = document.getElementById('uniLogin');
 
-  const data = Object.fromEntries(new FormData(e.target)); // username, password, accountType
+form.addEventListener('submit', e => {
+  e.preventDefault(); // prevent page reload
 
-  const res = await fetch('/api/unified/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(r => r.json());
+  const data = Object.fromEntries(new FormData(form)); // username, password, accountType
+  const { username, password, accountType } = data;
 
-  if (res.token) {
-    localStorage.setItem('token', res.token); // save auth
-    // route by account type
-    switch (data.accountType) {
-      case 'user':     location = 'user/portal.html'; break;
-      case 'business': location = 'business/portal.html'; break;
-      case 'admin':    location = 'admin/dashboard.html'; break;
-      default:         location = 'generalhomepage.html'; // fallback
+  if (!username || !password || !accountType) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  let storedData;
+
+  switch(accountType) {
+    case 'user':
+      storedData = {
+        username: localStorage.getItem('savedUsername'),
+        password: localStorage.getItem('savedPassword')
+      };
+      break;
+
+    case 'business':
+      const biz = localStorage.getItem('savedBusiness');
+      storedData = biz ? JSON.parse(biz) : null;
+      break;
+
+    case 'admin':
+      // example admin hardcoded for demo purposes
+      storedData = { username: 'admin', password: 'admin123' };
+      break;
+
+    default:
+      alert('Invalid account type.');
+      return;
+  }
+
+  if (!storedData) {
+    alert(`${accountType} account not found.`);
+    return;
+  }
+
+  // Check credentials
+  if (username === storedData.username && password === storedData.password) {
+    // Save token for demo (could be any string)
+    localStorage.setItem('token', 'local-login-token');
+
+    // Redirect by account type
+    switch(accountType) {
+      case 'user': location.href = 'Userdashboard.html'; break;
+      case 'business': location.href = 'businessdash.html'; break;
+      case 'admin': location.href = 'admindash.html'; break;
     }
   } else {
-    alert(res.message || 'Login failed.');
+    alert('Incorrect username or password.');
   }
 });

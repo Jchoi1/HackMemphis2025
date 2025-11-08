@@ -1,20 +1,24 @@
-// user-reg.js  — handles USER sign-up with live typed values
-document.getElementById('userRegForm').addEventListener('submit', async e => {
-  e.preventDefault(); // stop page reload
+// Get the registration form
+const form = document.getElementById('userRegForm');
 
+form.addEventListener('submit', function(e) {
+  e.preventDefault(); // prevent page reload
+
+  // Get the username and password values
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
 
-  const res = await fetch('/api/user/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  }).then(r => r.json());
-
-  if (res.ok) {
-    alert('Account created!');
-    location = 'userlogin.html'; // go to login after success
-  } else {
-    alert(res.message || 'Registration failed.');
+  // Check if fields are empty
+  if (!username || !password) {
+    alert('Please fill in both fields.');
+    return;
   }
+
+  // Store credentials in localStorage for login page
+  localStorage.setItem('savedUsername', username);
+  localStorage.setItem('savedPassword', password);
+
+  // Notify user and redirect
+  alert('Account created!');
+  location.href = 'officallogin.html';
 });
