@@ -125,20 +125,3 @@ def register_user(user: UserRegister):
     conn.commit()
     conn.close()
     return {"message": "User registered successfully"}
-
-@app.post("/api/login/user")
-def login_user(user: LoginData):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT * FROM users WHERE username = ? AND password = ? AND role = 'user'",
-        (user.username, user.password)
-    )
-    found = cursor.fetchone()
-    conn.close()
-
-    if not found:
-        raise HTTPException(status_code=401, detail="Invalid username or password")
-
-    return {"message": "Login successful", "username": user.username}
