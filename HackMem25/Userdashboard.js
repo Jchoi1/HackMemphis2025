@@ -12,7 +12,6 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-// 🔹 Load organizations dynamically from backend
 async function loadBiz() {
   const box = document.getElementById('bizList');
   box.innerHTML = "<p>Loading organizations...</p>";
