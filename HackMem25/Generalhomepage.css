@@ -1,0 +1,89 @@
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Colors */
+:root {
+  --blue: #0033a0;
+  --gold: #ffc72c;
+  --gray: #f4f4f4;
+  --text: #222;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  background: var(--gray);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background: var(--blue);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+header p {
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+.box {
+  background: #fff;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.box h2 {
+  margin-bottom: 1.2rem;
+  color: var(--blue);
+}
+
+.box a {
+  display: block;
+  margin: 0.75rem 0;
+  padding: 0.9rem;
+  border-radius: 8px;
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.box a:nth-child(3) {
+  background: var(--gold);
+  color: var(--text);
+}
+
+.box a:nth-child(4) {
+  background: #555;
+}
+
+.box p {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+}
