@@ -12,43 +12,35 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-async function loadBiz() {
+// WIZARD LAUNCHER
+document.getElementById('needBtn').addEventListener('click', () => {
+  location = 'need-wizard.html'; // step-by-step sorting page
+});
+
+// DEMO DATA
+const dummyBiz = [
+  {id:1,name:"Mid-South Food Bank",categories:["Food"],desc:"Groceries & hot meals"},
+  {id:2,name:"Memphis Health Center",categories:["Health"],desc:"Free medical clinic"},
+  {id:3,name:"United Way Housing",categories:["Housing"],desc:"Emergency shelter"}
+];
+
+function loadBiz(list = dummyBiz) {
   const box = document.getElementById('bizList');
-  box.innerHTML = "<p>Loading organizations...</p>";
-
-  try {
-    const res = await fetch("http://127.0.0.1:8000/api/organizations");
-    const data = await res.json();
-    const list = data.organizations || [];
-
-    if (!list.length) {
-      box.innerHTML = "<p>No organizations found.</p>";
-      return;
-    }
-
-    box.innerHTML = list.map(b => `
-      <div class="biz-card">
-        <h4>${b.name}</h4>
-        <p>${b.desc || "No description"}</p>
-        <p><b>Contact:</b> ${b.org_phone || "N/A"}</p>
-        <p><b>Address:</b> ${b.org_address || "N/A"}</p>
-        <button onclick="toggleFav(${b.id})">☆</button>
-      </div>`).join('');
-  } catch (err) {
-    console.error("Error loading organizations:", err);
-    box.innerHTML = "<p>Failed to load data. Please try again.</p>";
-  }
+  box.innerHTML = list.map(b => `
+    <div class="biz-card">
+      <h4>${b.name}</h4>
+      <p>${b.categories.join(', ')} • ${b.desc}</p>
+      <button onclick="toggleFav(${b.id})">☆</button>
+    </div>`).join('');
 }
 
-// FAVORITES (stored in localStorage)
+// FAVORITES
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
 function toggleFav(id) {
-  favorites = favorites.includes(id)
-    ? favorites.filter(x => x !== id)
-    : [...favorites, id];
+  favorites = favorites.includes(id) ? favorites.filter(x => x !== id) : [...favorites, id];
   localStorage.setItem('favorites', JSON.stringify(favorites));
-  loadBiz(); // refresh stars
+  loadBiz();
 }
 
 function loadFaves() {
@@ -57,21 +49,26 @@ function loadFaves() {
     ? favBiz.map(b => `
         <div class="biz-card">
           <h4>${b.name}</h4>
-          <p>${b.tag} • ${b.desc}</p>
+          <p>${b.categories.join(', ')} • ${b.desc}</p>
         </div>`).join('')
     : '<p>No favorites yet.</p>';
 }
 
-// PROFILE TAB
+// PROFILE
 function showProfile() {
-  document.getElementById('showUser').textContent =
-    localStorage.getItem('savedUsername') || 'Guest';
+  document.getElementById('showUser').textContent = localStorage.getItem('savedUsername') || 'Guest';
 }
+
+document.getElementById('clearFaves').addEventListener('click', () => {
+  favorites = [];
+  localStorage.removeItem('favorites');
+  loadFaves();
+});
 
 // LOGOUT
 document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.clear();
-  location = '../generalhomepage.html';
+  location = 'Generalhomepage.html';
 });
 
 // initial load

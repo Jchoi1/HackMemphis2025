@@ -29,10 +29,10 @@
       <form id="bizReg">
         <input name="username" type="text" placeholder="Username" required />
         <input name="password" type="password" placeholder="Password" minlength="6" required />
-        <input name="org_name" type="text" placeholder="Business name" required />
-        <input name="org_address" type="text" placeholder="Address" required />
-        <input name="org_email" type="email" placeholder="Email (or phone below)" />
-        <input name="org_phone" type="tel" placeholder="Phone (if no email)" />
+        <input name="businessName" type="text" placeholder="Business name" required />
+        <input name="address" type="text" placeholder="Address" required />
+        <input name="email" type="email" placeholder="Email (or phone below)" />
+        <input name="phone" type="tel" placeholder="Phone (if no email)" />
         <button type="submit">Create Account</button>
       </form>
 
@@ -43,6 +43,35 @@
   <footer>
     &copy; 2025 901-211 | United Way of the Mid-South
   </footer>
-  <script src="/static/Bussinessreg.js"></script>
+
+  <script>
+    const form = document.getElementById('bizReg');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent page reload
+
+      // Get all input values
+      const username = form.querySelector('input[name="username"]').value.trim();
+      const password = form.querySelector('input[name="password"]').value;
+      const businessName = form.querySelector('input[name="businessName"]').value.trim();
+      const address = form.querySelector('input[name="address"]').value.trim();
+      const email = form.querySelector('input[name="email"]').value.trim();
+      const phone = form.querySelector('input[name="phone"]').value.trim();
+
+      // Validate required fields
+      if (!username || !password || !businessName || !address) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Store business data in localStorage
+      const businessData = { username, password, businessName, address, email, phone };
+      localStorage.setItem('savedBusiness', JSON.stringify(businessData));
+
+      // Notify and redirect
+      alert('Business account created!');
+      window.location.href = 'officallogin.html';
+    });
+  </script>
 </body>
 </html>

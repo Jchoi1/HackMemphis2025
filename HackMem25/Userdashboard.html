@@ -8,34 +8,31 @@
 </head>
 
 <body>
-  <!-- TOP BAR -->
   <header class="dash-header">
     <h1>901-211</h1>
-    <button id="logoutBtn">Logout</button>
+    <div class="head-btns">
+      <button id="needBtn" class="need-btn">I Need Help</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
   </header>
 
-  <!-- CONTENT AREA (tabs) -->
   <main id="tabContent">
-    <!-- HOME -->
     <section id="home" class="tab active">
       <h2>Welcome, Grizzly!</h2>
       <input id="searchBar" placeholder="Search resources…" />
       <div id="bizList" class="biz-grid"></div>
     </section>
 
-    <!-- FAVORITES -->
     <section id="faves" class="tab">
       <h2>Your Favorites</h2>
       <div id="faveList" class="biz-grid"></div>
     </section>
 
-    <!-- MAP -->
     <section id="map" class="tab">
       <h2>Map View</h2>
       <div class="map-box">Map placeholder</div>
     </section>
 
-    <!-- PROFILE -->
     <section id="profile" class="tab">
       <h2>Profile</h2>
       <p>Username: <span id="showUser"></span></p>
@@ -43,7 +40,6 @@
     </section>
   </main>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button data-tab="home" class="nav-btn active">Home</button>
     <button data-tab="faves" class="nav-btn">Favorites</button>
