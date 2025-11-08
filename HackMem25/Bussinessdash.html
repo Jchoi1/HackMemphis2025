@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Dashboard | 901-211</title>
+  <link rel="stylesheet" href="bussinessdash.css" />
+</head>
+
+<body>
+  <!-- TOP BAR -->
+  <header class="dash-header">
+    <h1>901-211 Business</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <!-- CONTENT -->
+  <main id="tabContent">
+    <!-- TAB 1 : HOME -->
+    <section id="home" class="tab active">
+      <h2>Dashboard</h2>
+      <div class="stat-row">
+        <div class="stat">👤 <span id="favCount">0</span> Favorites</div>
+        <div class="stat">📨 <span id="msgCount">0</span> Messages</div>
+      </div>
+      <h3>Recent Favorites</h3>
+      <ul id="recentFaves" class="clean-list"></ul>
+    </section>
+
+    <!-- TAB 2 : CARD BUILDER -->
+    <section id="card" class="tab">
+      <h2>Business Card Builder</h2>
+
+      <form id="cardForm">
+        <input name="name" placeholder="Business Name" required />
+        <input name="address" placeholder="Address" required />
+        <input name="hours" placeholder="Hours (e.g. Mon-Fri 9-5)" required />
+
+        <!-- MULTI-CATEGORY PICKER -->
+        <label>Categories (check all that apply)</label>
+        <div id="catPicker" class="cat-row">
+          <label><input type="checkbox" value="Food"> Food</label>
+          <label><input type="checkbox" value="Health"> Health</label>
+          <label><input type="checkbox" value="Housing"> Housing</label>
+          <label><input type="checkbox" value="Clothing"> Clothing</label>
+          <label><input type="checkbox" value="Taxes"> Taxes</label>
+          <label><input type="checkbox" value="Childcare"> Childcare</label>
+          <label><input type="checkbox" value="Transportation"> Transportation</label>
+          <label><input type="checkbox" value="Legal"> Legal</label>
+        </div>
+
+        <textarea name="desc" maxlength="300" placeholder="Short description (300 chars)" required></textarea>
+        <input name="email" type="email" placeholder="Public email" />
+        <input name="phone" type="tel" placeholder="Public phone" />
+        <button type="submit">Save Card</button>
+      </form>
+
+      <h3>Live Preview</h3>
+      <div id="previewCard" class="preview-card">
+        <h4 id="prevName">Your Name</h4>
+        <p id="prevTag">Category</p>
+        <p id="prevDesc">Description</p>
+        <p id="prevHours">Hours</p>
+        <p id="prevContact">Contact</p>
+      </div>
+    </section>
+
+    <!-- TAB 3 : COMMUNICATIONS -->
+    <section id="comm" class="tab">
+      <h2>Communications</h2>
+
+      <div class="comm-box">
+        <h3>Users (Favorited You)</h3>
+        <div id="userMsgs" class="msg-list"></div>
+        <textarea id="replyUser" placeholder="Reply to selected user…"></textarea>
+        <button onclick="sendReply('user')">Send to User</button>
+      </div>
+
+      <div class="comm-box">
+        <h3>Admin</h3>
+        <div id="adminMsgs" class="msg-list"></div>
+        <textarea id="replyAdmin" placeholder="Message admin…"></textarea>
+        <button onclick="sendReply('admin')">Send to Admin</button>
+      </div>
+    </section>
+
+    <!-- TAB 4 : SETTINGS -->
+    <section id="settings" class="tab">
+      <h2>Settings</h2>
+      <form id="settingsForm">
+        <label>Business Address
+          <input name="address" id="setAddress" />
+        </label>
+        <label>Business Hours
+          <input name="hours" id="setHours" />
+        </label>
+        <label>Website
+          <input name="website" id="setWebsite" />
+        </label>
+        <button type="submit">Update</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button data-tab="home" class="nav-btn active">Home</button>
+    <button data-tab="card" class="nav-btn">Card</button>
+    <button data-tab="comm" class="nav-btn">Messages</button>
+    <button data-tab="settings" class="nav-btn">Settings</button>
+  </nav>
+
+  <script src="/static/Bussinessdash.js"></script>
+</body>
+</html>

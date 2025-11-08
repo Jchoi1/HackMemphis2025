@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard | 901-211</title>
+  <link rel="stylesheet" href="admindash.css" />
+</head>
+
+<body>
+  <header class="dash-header">
+    <h1>901-211 Admin</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <main id="tabContent">
+    <!-- TAB 1 : ANALYTICS -->
+    <section id="analytics" class="tab active">
+      <h2>Analytics</h2>
+
+      <div class="stat-row">
+        <div class="stat">👤 <span id="totalUsers">0</span> Users</div>
+        <div class="stat">🏢 <span id="totalBiz">0</span> Businesses</div>
+        <div class="stat">📊 <span id="totalReports">0</span> Reports</div>
+      </div>
+
+      <h3>Most Clicked</h3>
+      <ul id="clickRank" class="clean-list"></ul>
+
+      <h3>Most Favorited</h3>
+      <ul id="favRank" class="clean-list"></ul>
+    </section>
+
+    <!-- TAB 2 : REPORTS -->
+    <section id="reports" class="tab">
+      <h2>User Reports</h2>
+      <div id="reportList" class="report-list"></div>
+    </section>
+
+    <!-- TAB 3 : MESSAGES -->
+    <section id="messages" class="tab">
+      <h2>Messages</h2>
+
+      <div class="msg-box">
+        <h3>Businesses</h3>
+        <select id="bizSelect"><option>Select business</option></select>
+        <div id="bizChat" class="chat"></div>
+        <textarea id="bizReply" placeholder="Type to business…"></textarea>
+        <button onclick="sendMsg('business')">Send</button>
+      </div>
+
+      <div class="msg-box">
+        <h3>Users</h3>
+        <select id="userSelect"><option>Select user</option></select>
+        <div id="userChat" class="chat"></div>
+        <textarea id="userReply" placeholder="Type to user…"></textarea>
+        <button onclick="sendMsg('user')">Send</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button data-tab="analytics" class="nav-btn active">Analytics</button>
+    <button data-tab="reports" class="nav-btn">Reports</button>
+    <button data-tab="messages" class="nav-btn">Messages</button>
+  </nav>
+
+  <script src="/static/admindash.js"></script>
+</body>
+</html>
