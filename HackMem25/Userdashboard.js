@@ -69,8 +69,7 @@ document.getElementById('clearFaves').addEventListener('click', () => {
 
 // LOGOUT
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  localStorage.clear();
-  location = 'Generalhomepage.html';
+  window.location.href = '../static/Generalhomepage.html';
 });
 
 // initial load

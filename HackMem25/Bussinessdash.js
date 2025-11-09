@@ -89,6 +89,5 @@ document.getElementById('settingsForm').addEventListener('submit', e => {
 
 // ---------- LOGOUT ----------
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  localStorage.clear();
-  location = '../generalhomepage.html';
+  window.location.href = '../static/Generalhomepage.html';
 });
