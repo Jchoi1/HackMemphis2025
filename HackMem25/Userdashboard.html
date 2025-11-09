@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>User Dashboard | 901-211</title>
+  <title>User Dashboard | Linc901</title>
   <link rel="stylesheet" href="Userdashboard.css" />
 </head>
 
 <body>
   <header class="dash-header">
-    <h1>901-211</h1>
+    <h1>Linc901</h1>
     <div class="head-btns">
       <button id="needBtn" class="need-btn">I Need Help</button>
       <button id="logoutBtn">Logout</button>
@@ -34,9 +34,49 @@
       <div id="mapCanvas" class="map-box"></div> <!-- Map container -->
     </section>
 
+    <!-- ==========  PROFILE  ========== -->
     <section id="profile" class="tab">
       <h2>Profile</h2>
       <p>Username: <span id="showUser"></span></p>
+
+      <!-- ONE-TIME STORY -->
+      <div class="story-box">
+        <h3>My Story (tell it once)</h3>
+        <label>People in household</label>
+        <input id="household" type="number" min="1" value="1" />
+
+        <label>Employment</label>
+        <select id="employed"><option>Yes</option><option>No</option><option>Part-time</option></select>
+
+        <label>Transportation</label>
+        <select id="transport"><option>Yes</option><option>No</option><option>Limited</option></select>
+
+        <label>Biggest needs (tap all)</label>
+        <div id="needsGrid" class="needs-grid">
+          <label><input type="checkbox" value="Food"> Food</label>
+          <label><input type="checkbox" value="Housing"> Housing</label>
+          <label><input type="checkbox" value="Childcare"> Childcare</label>
+          <label><input type="checkbox" value="Healthcare"> Healthcare</label>
+          <label><input type="checkbox" value="Transportation"> Transportation</label>
+          <label><input type="checkbox" value="Legal"> Legal</label>
+        </div>
+
+        <label>Anything else?</label>
+        <textarea id="extra" maxlength="300" placeholder="e.g. 'I just lost my job and my car broke down'"></textarea>
+
+        <label class="toggle-box">
+          <input id="attachToggle" type="checkbox" checked />
+          Attach my story to the first message I send to providers
+        </label>
+
+        <div id="previewBox" class="preview-box">
+          <strong>Providers will see:</strong>
+          <p id="needsSummary"></p>
+        </div>
+
+        <button id="saveStoryBtn" class="save-btn">Save Story</button>
+      </div>
+
       <button id="clearFaves">Clear Favorites</button>
     </section>
   </main>
@@ -47,10 +87,9 @@
     <button data-tab="map" class="nav-btn">Map</button>
     <button data-tab="profile" class="nav-btn">Profile</button>
   </nav>
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM-4UJhyj9k94IzpJDzV_fhi-OVlutLe0" async defer></script>
 
   <script>
-  // TAB SWITCHING
+  // ----------  EXISTING CODE  ----------
   let mapInitialized = false;
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -63,12 +102,8 @@
       if (btn.dataset.tab === 'faves') loadFaves();
       if (btn.dataset.tab === 'profile') showProfile();
 
-      // Initialize Map when opening map tab
       if (btn.dataset.tab === 'map' && !mapInitialized) {
-        setTimeout(() => {
-          initMap();
-          mapInitialized = true;
-        }, 200);
+        setTimeout(() => { initMap(); mapInitialized = true; }, 200);
       }
     });
   });
@@ -80,7 +115,6 @@
     location = 'filter.html';
   });
 
-  // DEMO DATA
   const dummyBiz = [
     {id:1, name:"Mid-South Food Bank", categories:["Food"], desc:"Groceries & hot meals"},
     {id:2, name:"Memphis Health Center", categories:["Health"], desc:"Free medical clinic"},
@@ -131,8 +165,58 @@
       : '<p>No favorites yet.</p>';
   }
 
+  // ----------  ONE-TIME STORY  ----------
+  const household   = document.getElementById('household');
+  const employed    = document.getElementById('employed');
+  const transport   = document.getElementById('transport');
+  const extra       = document.getElementById('extra');
+  const attachToggle= document.getElementById('attachToggle');
+  const needsSummary= document.getElementById('needsSummary');
+  const saveStoryBtn= document.getElementById('saveStoryBtn');
+
+  function buildSummary(){
+    const people = household.value || '1';
+    const job    = employed.value;
+    const car    = transport.value;
+    const needs  = [...document.querySelectorAll('#needsGrid input:checked')].map(cb => cb.value);
+    const other  = extra.value.trim();
+    let txt = `Household of ${people} people. Currently employed: ${job}. Transportation: ${car}.`;
+    if (needs.length) txt += ` Needs: ${needs.join(', ')}.`;
+    if (other) txt += ` Additional info: ${other}`;
+    needsSummary.textContent = txt;
+    return txt;
+  }
+
+  document.addEventListener('input', buildSummary);
+
+  saveStoryBtn.addEventListener('click', () => {
+    const summary = buildSummary();
+    const data = {
+      household: household.value,
+      employed: employed.value,
+      transport: transport.value,
+      needs: [...document.querySelectorAll('#needsGrid input:checked')].map(cb => cb.value),
+      extra: extra.value,
+      attachOnFirstMsg: attachToggle.checked,
+      needsSummary: summary
+    };
+    localStorage.setItem('userStory', JSON.stringify(data));
+    alert('Story saved!');
+  });
+
   function showProfile() {
     document.getElementById('showUser').textContent = localStorage.getItem('savedUsername') || 'Guest';
+    const saved = JSON.parse(localStorage.getItem('userStory') || '{}');
+    if (saved.household) household.value = saved.household;
+    if (saved.employed) employed.value = saved.employed;
+    if (saved.transport) transport.value = saved.transport;
+    if (saved.extra) extra.value = saved.extra;
+    if (saved.attachOnFirstMsg !== undefined) attachToggle.checked = saved.attachOnFirstMsg;
+    saved.needs?.forEach(n => {
+      const cb = document.querySelector(`#needsGrid input[value="${n}"]`);
+      if (cb) cb.checked = true;
+    });
+    buildSummary();
   }
 
   document.getElementById('clearFaves').addEventListener('click', () => {
@@ -146,34 +230,25 @@
     location = 'Generalhomepage.html';
   });
 
-  // MAP
+  // ----------  MAP  ----------
   let map;
   function initMap() {
     const memphis = { lat: 35.1495, lng: -90.0490 };
-
-    map = new google.maps.Map(document.getElementById("mapCanvas"), {
-      center: memphis,
-      zoom: 12
-    });
-
+    map = new google.maps.Map(document.getElementById("mapCanvas"), { center: memphis, zoom: 12 });
     dummyBiz.forEach(b => {
       new google.maps.Marker({
-        position: {
-          lat: memphis.lat + Math.random() * 0.05,
-          lng: memphis.lng + Math.random() * 0.05
-        },
+        position: { lat: memphis.lat + Math.random() * 0.05, lng: memphis.lng + Math.random() * 0.05 },
         map,
         title: b.name
       });
     });
   }
 
-  // Initial load
+  // initial load
   loadBiz();
   </script>
 
   <!-- Google Maps API -->
-  <!-- Replace YOUR_API_KEY with your actual key -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo7WiUQW6GJ-x62R9JVrB-kNXpud7YP84"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo7WiUQW6GJ-x62R9JVrB-kNXpud7YP84"></script>
 </body>
 </html>

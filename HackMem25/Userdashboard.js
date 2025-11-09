@@ -1,4 +1,5 @@
-// TAB SWITCHING
+
+let mapInitialized = false;
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -10,12 +11,8 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     if (btn.dataset.tab === 'faves') loadFaves();
     if (btn.dataset.tab === 'profile') showProfile();
 
-    
     if (btn.dataset.tab === 'map' && !mapInitialized) {
-      setTimeout(() => {
-        initMap();
-        mapInitialized = true;
-      }, 200);
+      setTimeout(() => { initMap(); mapInitialized = true; }, 200);
     }
   });
 });
@@ -27,7 +24,7 @@ document.getElementById('needBtn').addEventListener('click', () => {
   location = 'filter.html';
 });
 
-// DEMO DATA
+
 const dummyBiz = [
   {id:1, name:"Mid-South Food Bank", categories:["Food"], desc:"Groceries & hot meals"},
   {id:2, name:"Memphis Health Center", categories:["Health"], desc:"Free medical clinic"},
@@ -47,7 +44,6 @@ function loadBiz(list = dummyBiz) {
     </div>`).join('');
 }
 
-// REPORT A BUSINESS
 function reportBiz(id) {
   const reason = prompt('What needs to be reported?\n(e.g. hours wrong, location closed, etc.)');
   if (!reason) return;
@@ -60,7 +56,6 @@ function reportBiz(id) {
   });
 }
 
-// FAVORITES
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
 function toggleFav(id) {
@@ -80,9 +75,60 @@ function loadFaves() {
     : '<p>No favorites yet.</p>';
 }
 
-// PROFILE
+// ----------  ONE-TIME STORY  ----------
+const household   = document.getElementById('household');
+const employed    = document.getElementById('employed');
+const transport   = document.getElementById('transport');
+const extra       = document.getElementById('extra');
+const attachToggle= document.getElementById('attachToggle');
+const needsSummary= document.getElementById('needsSummary');
+const saveStoryBtn= document.getElementById('saveStoryBtn');
+
+function buildSummary(){
+  const people = household.value || '1';
+  const job    = employed.value;
+  const car    = transport.value;
+  const needs  = [...document.querySelectorAll('#needsGrid input:checked')].map(cb => cb.value);
+  const other  = extra.value.trim();
+  let txt = `Household of ${people} people. Currently employed: ${job}. Transportation: ${car}.`;
+  if (needs.length) txt += ` Needs: ${needs.join(', ')}.`;
+  if (other) txt += ` Additional info: ${other}`;
+  needsSummary.textContent = txt;
+  return txt;
+}
+
+// live preview + auto-save on change
+document.addEventListener('input', buildSummary);
+saveStoryBtn.addEventListener('click', () => {
+  const summary = buildSummary();
+  const data = {
+    household: household.value,
+    employed: employed.value,
+    transport: transport.value,
+    needs: [...document.querySelectorAll('#needsGrid input:checked')].map(cb => cb.value),
+    extra: extra.value,
+    attachOnFirstMsg: attachToggle.checked,
+    needsSummary: summary
+  };
+  localStorage.setItem('userStory', JSON.stringify(data));
+  alert('Story saved!');
+});
+
 function showProfile() {
+  // 1.  show username
   document.getElementById('showUser').textContent = localStorage.getItem('savedUsername') || 'Guest';
+  // 2.  load story if saved
+  const saved = JSON.parse(localStorage.getItem('userStory') || '{}');
+  if (saved.household) household.value = saved.household;
+  if (saved.employed) employed.value = saved.employed;
+  if (saved.transport) transport.value = saved.transport;
+  if (saved.extra) extra.value = saved.extra;
+  if (saved.attachOnFirstMsg !== undefined) attachToggle.checked = saved.attachOnFirstMsg;
+  saved.needs?.forEach(n => {
+    const cb = document.querySelector(`#needsGrid input[value="${n}"]`);
+    if (cb) cb.checked = true;
+  });
+  buildSummary();
 }
 
 document.getElementById('clearFaves').addEventListener('click', () => {
@@ -91,45 +137,24 @@ document.getElementById('clearFaves').addEventListener('click', () => {
   loadFaves();
 });
 
-// LOGOUT
 document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.clear();
   location = 'Generalhomepage.html';
 });
 
-// MAP
+// ----------  MAP  ----------
 let map;
-let mapInitialized = false;
-
 function initMap() {
   const memphis = { lat: 35.1495, lng: -90.0490 };
-
-  map = new google.maps.Map(document.getElementById("mapCanvas"), {
-    center: memphis,
-    zoom: 12
-  });
-
-  const geocoder = new google.maps.Geocoder();
-
+  map = new google.maps.Map(document.getElementById("mapCanvas"), { center: memphis, zoom: 12 });
   dummyBiz.forEach(b => {
-    geocoder.geocode({ address: b.name + ", Memphis, TN" }, (results, status) => {
-      if (status === "OK" && results[0]) {
-        const location = results[0].geometry.location;
-
-        const marker = new google.maps.Marker({
-          map,
-          position: location,
-          title: b.name
-        });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: `<h4>${b.name}</h4><p>${b.categories.join(', ')} • ${b.desc}</p>`
-        });
-
-        marker.addListener("click", () => infoWindow.open(map, marker));
-      } else {
-        console.error("Geocode failed for " + b.name + ": " + status);
-      }
+    new google.maps.Marker({
+      position: { lat: memphis.lat + Math.random() * 0.05, lng: memphis.lng + Math.random() * 0.05 },
+      map,
+      title: b.name
     });
   });
 }
+
+// initial load
+loadBiz();
