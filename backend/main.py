@@ -32,7 +32,10 @@ class UserRegister(BaseModel):
     username: str
     password: str
     role: str = "user"
-
+class AdminRegister(BaseModel):
+    username: str
+    password: str
+    role: str = "admin"
 class OrganizationUser(BaseModel):
     username: str
     password: str
@@ -108,6 +111,26 @@ def get_all_organizations():
 
 @app.post("/api/register/user")
 def register_user(user: UserRegister):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if username exists
+    cursor.execute("SELECT * FROM users WHERE username = ?", (user.username,))
+    existing = cursor.fetchone()
+    if existing:
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    cursor.execute("""
+        INSERT INTO users (username, password, role)
+        VALUES (?, ?, ?)
+    """, (user.username, user.password, user.role))
+
+    conn.commit()
+    conn.close()
+    return {"message": "User registered successfully"}
+
+@app.post("/api/register/admin")
+def register_user(user: AdminRegister):
     conn = get_db_connection()
     cursor = conn.cursor()
 
