@@ -1,0 +1,130 @@
+:root{
+  --den-blue:#4a6fa5;
+  --pale-den:#e7eef9;
+  --claw:#8b5a3c;
+  --text:#222;
+  --soft:#fdfdfd;
+  font-family:system-ui, sans-serif;
+}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+body{
+  background:var(--pale-den);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+}
+.wiz-header{
+  background:var(--den-blue);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:.75rem 1rem;
+  gap:1rem;
+}
+.wiz-header h1{
+  flex:1;
+  text-align:center;
+  font-size:1.1rem;
+}
+.back-btn,.skip-btn{
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:1rem;
+  cursor:pointer;
+  padding:.25rem .5rem;
+}
+.step{
+  display:none;
+  padding:1rem;
+  animation:fadeIn .3s;
+}
+.step.active{
+  display:block;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
+
+h2{
+  text-align:center;
+  margin-bottom:1rem;
+  font-size:1.1rem;
+}
+.needs-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+.need-card{
+  background:#fff;
+  border-radius:12px;
+  padding:1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
+}
+.need-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+.need-card.selected{
+  border:2px solid var(--den-blue);
+  background:var(--pale-den);
+}
+.need-icon{
+  font-size:2rem;
+  margin-bottom:.5rem;
+}
+.need-label{
+  font-size:.9rem;
+  font-weight:600;
+}
+.next-btn,.restart-btn{
+  width:100%;
+  margin-top:1.5rem;
+  padding:.75rem;
+  border:none;
+  border-radius:25px;
+  background:var(--den-blue);
+  color:#fff;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+}
+.restart-btn{
+  background:var(--claw);
+}
+.results-grid{
+  display:grid;
+  gap:.75rem;
+}
+.result-card{
+  background:#fff;
+  border-radius:12px;
+  padding:1rem;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
+}
+.result-card h4{
+  margin:0 0 .3rem;
+  color:var(--den-blue);
+}
+.result-card p{
+  font-size:.8rem;
+  color:#555;
+  margin:.2rem 0;
+}
+.result-card button{
+  margin-top:.5rem;
+  padding:.4rem .6rem;
+  border:none;
+  border-radius:6px;
+  background:var(--den-blue);
+  color:#fff;
+  font-size:.75rem;
+  cursor:pointer;
+}

@@ -12,9 +12,11 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-// WIZARD LAUNCHER
+document.getElementById('homeBtn')?.addEventListener('click', () => {
+  location = 'Userdashboard.html';   // or your landing page
+});
 document.getElementById('needBtn').addEventListener('click', () => {
-  location = 'need-wizard.html'; // step-by-step sorting page
+  location = 'filter.html'; // step-by-step sorting page
 });
 
 // DEMO DATA
