@@ -1,4 +1,4 @@
-// ---------- TABS ----------
+
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -12,7 +12,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-// ---------- ANALYTICS ----------
+
 const dummyClicks = [
   {bizId:1,name:"Mid-South Food Bank",clicks:120},
   {bizId:2,name:"Memphis Health Center",clicks:95},
@@ -64,7 +64,7 @@ function resolveReport(id, action) {
   // TODO: fetch PATCH /api/admin/reports/${id}  {status:action}
 }
 
-// ---------- MESSAGES ----------
+
 const dummyBiz = [
   {id:1,name:"Mid-South Food Bank"},
   {id:2,name:"Memphis Health Center"},
@@ -99,9 +99,10 @@ function sendMsg(to) {
   // TODO: fetch POST /api/admin/message  {toType:to, toId:select.value, text}
 }
 
-// ---------- LOGOUT ----------
+
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  window.location.href = '../static/Generalhomepage.html';
+  localStorage.clear();
+  location = '../generalhomepage.html';
 });
 
 // initial load

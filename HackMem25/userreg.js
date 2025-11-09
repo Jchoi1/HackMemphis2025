@@ -1,37 +1,24 @@
 // Get the registration form
 const form = document.getElementById('userRegForm');
 
-form.addEventListener('submit', async function (e) {
+form.addEventListener('submit', function(e) {
   e.preventDefault(); // prevent page reload
 
   // Get the username and password values
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
 
-  // Validate
+  // Check if fields are empty
   if (!username || !password) {
     alert('Please fill in both fields.');
     return;
   }
 
-  try {
-    // Send registration info to backend
-    const res = await fetch('http://127.0.0.1:8000/api/register/user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
+  // Store credentials in localStorage for login page
+  localStorage.setItem('savedUsername', username);
+  localStorage.setItem('savedPassword', password);
 
-    const data = await res.json();
-
-    if (res.ok) {
-      alert('Account created successfully!');
-      window.location.href = '/static/officallogin.html';
-    } else {
-      alert(data.detail || 'Registration failed.');
-    }
-  } catch (err) {
-    console.error('Error:', err);
-    alert('Could not connect to the server.');
-  }
+  // Notify user and redirect
+  alert('Account created!');
+  location.href = 'officallogin.html';
 });

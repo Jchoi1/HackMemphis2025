@@ -1,4 +1,3 @@
-
 const needOptions = [
   {id:'food',   icon:'🍲', label:'I need food'},
   {id:'health', icon:'🏥', label:'I need health care'},
@@ -10,7 +9,6 @@ const needOptions = [
   {id:'legal',  icon:'⚖️', label:'I need legal help'}
 ];
 
-
 const stepNeeds   = document.getElementById('stepNeeds');
 const stepResults = document.getElementById('stepResults');
 const needsGrid   = document.getElementById('needsGrid');
@@ -20,7 +18,7 @@ const backBtn     = document.getElementById('backBtn');
 const skipBtn     = document.getElementById('skipBtn');
 const restartBtn  = document.getElementById('restartBtn');
 
-let selected = []; 
+let selected = [];
 
 function renderNeeds() {
   needsGrid.innerHTML = needOptions.map(n => `
@@ -39,7 +37,6 @@ needsGrid.addEventListener('click', e => {
   selected = [...document.querySelectorAll('.need-card.selected')].map(c => c.dataset.id);
 });
 
-
 nextBtn.addEventListener('click', () => {
   stepNeeds.classList.remove('active');
   stepResults.classList.add('active');
@@ -47,7 +44,7 @@ nextBtn.addEventListener('click', () => {
 });
 
 document.getElementById('homeBtn')?.addEventListener('click', () => {
-  location = 'Userdashboard.html';   // or your landing page
+  location = 'Userdashboard.html';
 });
 
 backBtn.addEventListener('click', () => {
@@ -56,7 +53,7 @@ backBtn.addEventListener('click', () => {
 });
 
 skipBtn.addEventListener('click', () => {
-  selected = []; // no filter
+  selected = [];
   stepNeeds.classList.remove('active');
   stepResults.classList.add('active');
   runFilter();
@@ -81,7 +78,7 @@ const dummyBiz = [
 ];
 
 function runFilter() {
-  const wanted = selected.length ? selected : null; // null = show all
+  const wanted = selected.length ? selected : null;
   const hits = wanted
     ? dummyBiz.filter(b => b.categories.some(cat => wanted.includes(cat)))
     : dummyBiz;
@@ -90,7 +87,8 @@ function runFilter() {
     ? hits.map(b => `
         <div class="result-card">
           <h4>${b.name}</h4>
-          <p>${b.categories.join(', ')} • ${b.desc}</p>
+          <p class="tag-line">${b.categories.map(c => `<span class="tag" data-cat="${c}">${c}</span>`).join('')}</p>
+          <p>${b.desc}</p>
           <button onclick="viewBiz(${b.id})">View</button>
           <button onclick="toggleFav(${b.id})">☆</button>
         </div>`).join('')
@@ -106,7 +104,15 @@ let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 function toggleFav(id) {
   favorites = favorites.includes(id) ? favorites.filter(x => x !== id) : [...favorites, id];
   localStorage.setItem('favorites', JSON.stringify(favorites));
-
   const btn = event.target;
   btn.textContent = favorites.includes(id) ? '★' : '☆';
 }
+
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('tag')) {
+    const cat = e.target.dataset.cat;
+    selected = [cat];
+    runFilter();
+    document.getElementById('wizContent').scrollTop = 0;
+  }
+});

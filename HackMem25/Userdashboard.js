@@ -9,21 +9,29 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     if (btn.dataset.tab === 'home') loadBiz();
     if (btn.dataset.tab === 'faves') loadFaves();
     if (btn.dataset.tab === 'profile') showProfile();
+
+    
+    if (btn.dataset.tab === 'map' && !mapInitialized) {
+      setTimeout(() => {
+        initMap();
+        mapInitialized = true;
+      }, 200);
+    }
   });
 });
 
 document.getElementById('homeBtn')?.addEventListener('click', () => {
-  location = 'Userdashboard.html';   // or your landing page
+  location = 'Userdashboard.html';
 });
 document.getElementById('needBtn').addEventListener('click', () => {
-  location = 'filter.html'; // step-by-step sorting page
+  location = 'filter.html';
 });
 
 // DEMO DATA
 const dummyBiz = [
-  {id:1,name:"Mid-South Food Bank",categories:["Food"],desc:"Groceries & hot meals"},
-  {id:2,name:"Memphis Health Center",categories:["Health"],desc:"Free medical clinic"},
-  {id:3,name:"United Way Housing",categories:["Housing"],desc:"Emergency shelter"}
+  {id:1, name:"Mid-South Food Bank", categories:["Food"], desc:"Groceries & hot meals"},
+  {id:2, name:"Memphis Health Center", categories:["Health"], desc:"Free medical clinic"},
+  {id:3, name:"United Way Housing", categories:["Housing"], desc:"Emergency shelter"}
 ];
 
 function loadBiz(list = dummyBiz) {
@@ -32,8 +40,24 @@ function loadBiz(list = dummyBiz) {
     <div class="biz-card">
       <h4>${b.name}</h4>
       <p>${b.categories.join(', ')} • ${b.desc}</p>
-      <button onclick="toggleFav(${b.id})">☆</button>
+      <div class="card-actions">
+        <button onclick="toggleFav(${b.id})" title="Favorite">☆</button>
+        <button onclick="reportBiz(${b.id})" title="Report">🚩</button>
+      </div>
     </div>`).join('');
+}
+
+// REPORT A BUSINESS
+function reportBiz(id) {
+  const reason = prompt('What needs to be reported?\n(e.g. hours wrong, location closed, etc.)');
+  if (!reason) return;
+  fetch('/api/report', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bizId: id, reason, user: localStorage.getItem('savedUsername') || 'Guest' })
+  }).then(r => r.json()).then(res => {
+    alert(res.ok ? 'Report sent – thank you!' : 'Report failed.');
+  });
 }
 
 // FAVORITES
@@ -69,8 +93,43 @@ document.getElementById('clearFaves').addEventListener('click', () => {
 
 // LOGOUT
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  window.location.href = '../static/Generalhomepage.html';
+  localStorage.clear();
+  location = 'Generalhomepage.html';
 });
 
-// initial load
-loadBiz();
+// MAP
+let map;
+let mapInitialized = false;
+
+function initMap() {
+  const memphis = { lat: 35.1495, lng: -90.0490 };
+
+  map = new google.maps.Map(document.getElementById("mapCanvas"), {
+    center: memphis,
+    zoom: 12
+  });
+
+  const geocoder = new google.maps.Geocoder();
+
+  dummyBiz.forEach(b => {
+    geocoder.geocode({ address: b.name + ", Memphis, TN" }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const location = results[0].geometry.location;
+
+        const marker = new google.maps.Marker({
+          map,
+          position: location,
+          title: b.name
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<h4>${b.name}</h4><p>${b.categories.join(', ')} • ${b.desc}</p>`
+        });
+
+        marker.addListener("click", () => infoWindow.open(map, marker));
+      } else {
+        console.error("Geocode failed for " + b.name + ": " + status);
+      }
+    });
+  });
+}

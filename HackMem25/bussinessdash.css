@@ -173,3 +173,7 @@ button{
 .cat-row input:checked + label::before{
   background:var(--den-blue);
 }
+.cat-card.selected{
+  border:2px solid var(--den-blue);
+  background:var(--pale-den);
+}

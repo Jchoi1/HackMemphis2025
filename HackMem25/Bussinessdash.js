@@ -8,13 +8,13 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-// ---------- MULTI-CATEGORY ----------
+
 function getCategories(){
   return [...document.querySelectorAll('#catPicker input[type=checkbox]:checked')]
          .map(cb => cb.value);
 }
 
-// ---------- LIVE PREVIEW ----------
+
 document.getElementById('cardForm').addEventListener('input', e => {
   const field = e.target.name;
   const val   = e.target.value;
@@ -27,14 +27,14 @@ document.getElementById('cardForm').addEventListener('input', e => {
   const phone = document.querySelector('[name=phone]').value;
   document.getElementById('prevContact').textContent = [email, phone].filter(Boolean).join(' • ');
 
-  // multi-tag preview
+  
   if (e.target.type === 'checkbox') {
     const tags = getCategories();
     document.getElementById('prevTag').textContent = tags.length ? tags.join(', ') : 'Category';
   }
 });
 
-// ---------- SAVE CARD ----------
+
 document.getElementById('cardForm').addEventListener('submit', e => {
   e.preventDefault();
   const categories = getCategories();
@@ -64,7 +64,7 @@ demoTags.forEach(t =>
 );
 document.getElementById('prevTag').textContent = demoTags.join(', ');
 
-// ---------- MESSAGES ----------
+
 document.getElementById('userMsgs').innerHTML = `
   <div class="msg">User123: "Thanks for the help!"</div>
   <div class="msg">User456: "What are your weekend hours?"</div>
@@ -81,7 +81,7 @@ function sendReply(to) {
   box.value = '';
 }
 
-// ---------- SETTINGS ----------
+
 document.getElementById('settingsForm').addEventListener('submit', e => {
   e.preventDefault();
   alert('Settings updated (demo).');
@@ -89,5 +89,14 @@ document.getElementById('settingsForm').addEventListener('submit', e => {
 
 // ---------- LOGOUT ----------
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  window.location.href = '../static/Generalhomepage.html';
+  localStorage.clear();
+  location = 'Generalhomepage.html';
+});
+
+document.getElementById('catPicker').addEventListener('click', e => {
+  const card = e.target.closest('.cat-card');
+  if (!card) return;
+  const cb = card.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  card.classList.toggle('selected', cb.checked);
 });
