@@ -1,0 +1,29 @@
+[
+    {
+        "username": "organization1",
+        "password": "organization1"
+        "role": "organization",
+        "org_name": "organization one",
+        "org_address": "123 1st",
+        "org_phone": "731-286-5117",
+        "org_email": "1@example.com",
+        "org_service_description": "Services include emergency food boxes, hot lunch four days a week (Mon, Tue, Wed, and Thu 11:30 am-12:30), thrift store, utility assistance when funding is available for Dyer County residents in need, and School Uniform Program for Dyer County students.",
+        "org_eligibility": "Residents of Dyer County",
+        "org_intake_procedure": "Call to apply for assistance or walk in.",
+        "org_hours": "Administrative Offices Hours: Mon 9:00 am - 4:00 pm Tues - Friday 8:00 am to 4:00 pm Thrift Store hours: Mon - Sat 9:00 am - 5:00 pm (store open to all) Soup Kitchen Hours - Breakfast: Monday-Friday 7:30-9:00am and Saturday 8:30-9:30am Lunch: Monday-Friday 11:30-1:00pm"
+    },
+    {
+        "username": "organization2"
+        "password": "organization2"
+        "role": "organization"
+        "org_name": "organization two"
+        "org_address": "123 2nd"  
+        "org_phone": "731-427-7963"
+        "org_email": "2@example.com"
+        "org_service_description": "RIFA's mission is to reach out with the love of Christ to help people in need by providing physical and spiritual nourishment. RIFA provides monthly household food assistance as well as a soup kitchen open seven days a week. RIFA serves residents of Madison County. We also may be able to assist with other needs such as clothing vouchers for our thrift store as well as hygiene supplies. RIFA has a thrift store that provides items such as clothing, shoes, household items, and some groceries at a discounted price."
+        "org_eligibility": "Residents of Madison County who are in need" 
+        "org_intake_procedure": "Call or walk-in for more information; will do financial assessment to determine eligibility for some services The soup kitchen is no questions asked or documents required"
+        "org_hours": "Sunday closed | Monday 9:00AM-4:00PM | Tuesday 8:00AM-4:00PM | Wednesday 8:00AM-4:00PM | Thursday 8:00AM-4:00PM | Friday 8:00AM-4:00PM | Saturday closed"
+    }
+]
+
